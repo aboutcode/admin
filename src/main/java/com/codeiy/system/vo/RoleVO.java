@@ -15,25 +15,27 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
-package com.codeiy.quartz.service.impl;
+package com.codeiy.system.vo;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.codeiy.quartz.entity.SysJobLog;
-import com.codeiy.quartz.mapper.SysJobLogMapper;
-import com.codeiy.quartz.service.SysJobLogService;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 /**
- * 定时任务执行日志表
- *
- * @author frwcloud
- * @date 2019-01-27 13:40:20
+ * @author lengleng
+ * @date 2020/2/10
  */
-@Slf4j
-@Service
-@AllArgsConstructor
-public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLog> implements SysJobLogService {
+@Data
+@Schema(description = "前端角色展示对象")
+public class RoleVO {
+
+	/**
+	 * 角色id
+	 */
+	private Long roleId;
+
+	/**
+	 * 菜单列表
+	 */
+	private String menuIds;
 
 }

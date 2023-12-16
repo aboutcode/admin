@@ -14,37 +14,36 @@
  * limitations under the License.
  */
 
-package com.codeiy.common.openapi;
+package com.codeiy.system.entity;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 开启 pig spring doc
+ * <p>
+ * 用户岗位表
+ * </p>
  *
- * @author lengleng
- * @date 2022-03-26
+ * @author fxz
  */
-@Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@EnableConfigurationProperties(SwaggerProperties.class)
-@Import(OpenAPIDefinitionImportSelector.class)
-public @interface EnableDoc {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class SysUserPost extends Model<SysUserPost> {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 网关路由前缀
-	 * @return String
+	 * 用户ID
 	 */
-	String value();
+	@Schema(description = "用户id")
+	private Long userId;
 
 	/**
-	 * 是否是微服务架构
-	 * @return true
+	 * 岗位ID
 	 */
-	boolean isMicro() default true;
+	@Schema(description = "岗位id")
+	private Long postId;
 
 }

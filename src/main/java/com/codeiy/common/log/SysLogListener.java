@@ -17,7 +17,7 @@
 package com.codeiy.common.log;
 
 import cn.hutool.core.util.StrUtil;
-import com.codeiy.admin.entity.SysLog;
+import com.codeiy.system.entity.SysLog;
 import com.codeiy.common.jackson.JavaTimeModule;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;

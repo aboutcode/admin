@@ -22,7 +22,7 @@ public class OpenAPIDefinitionImportSelector implements ImportBeanDefinitionRegi
 	 */
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
-		Optional.ofNullable(metadata.getAnnotationAttributes(EnablePigDoc.class.getName(), true))
+		Optional.ofNullable(metadata.getAnnotationAttributes(EnableDoc.class.getName(), true))
 			.map(attrs -> attrs.get("value"))
 			.ifPresent(value -> {
 				createBeanDefinition(registry, "openAPIMetadataRegister", OpenAPIMetadataRegister.class, value);

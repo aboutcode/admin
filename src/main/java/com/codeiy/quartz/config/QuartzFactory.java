@@ -17,8 +17,8 @@
 
 package com.codeiy.quartz.config;
 
-import com.pig4cloud.pig.daemon.quartz.constants.PigQuartzEnum;
-import com.pig4cloud.pig.daemon.quartz.entity.SysJob;
+import com.codeiy.quartz.constants.QuartzEnum;
+import com.codeiy.quartz.entity.SysJob;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
@@ -43,7 +43,7 @@ public class QuartzFactory implements Job {
 	@SneakyThrows
 	public void execute(JobExecutionContext jobExecutionContext) {
 		SysJob sysJob = (SysJob) jobExecutionContext.getMergedJobDataMap()
-			.get(PigQuartzEnum.SCHEDULE_JOB_KEY.getType());
+			.get(QuartzEnum.SCHEDULE_JOB_KEY.getType());
 		pigxQuartzInvokeFactory.init(sysJob, jobExecutionContext.getTrigger());
 	}
 

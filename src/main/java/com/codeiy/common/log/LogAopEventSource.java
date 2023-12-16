@@ -1,6 +1,6 @@
 package com.codeiy.common.log;
 
-import com.codeiy.admin.entity.SysLog;
+import com.codeiy.system.entity.SysLog;
 import lombok.Data;
 
 /**

@@ -17,8 +17,8 @@
 
 package com.codeiy.quartz.event;
 
-import com.pig4cloud.pig.daemon.quartz.entity.SysJob;
-import com.pig4cloud.pig.daemon.quartz.util.TaskInvokUtil;
+import com.codeiy.quartz.entity.SysJob;
+import com.codeiy.quartz.util.TaskInvokUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Trigger;

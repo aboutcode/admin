@@ -17,8 +17,8 @@
 
 package com.codeiy.quartz.config;
 
-import com.pig4cloud.pig.daemon.quartz.entity.SysJob;
-import com.pig4cloud.pig.daemon.quartz.event.SysJobEvent;
+import com.codeiy.quartz.entity.SysJob;
+import com.codeiy.quartz.event.SysJobEvent;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

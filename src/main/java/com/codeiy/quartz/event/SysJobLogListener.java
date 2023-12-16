@@ -17,8 +17,8 @@
 
 package com.codeiy.quartz.event;
 
-import com.pig4cloud.pig.daemon.quartz.entity.SysJobLog;
-import com.pig4cloud.pig.daemon.quartz.service.SysJobLogService;
+import com.codeiy.quartz.entity.SysJobLog;
+import com.codeiy.quartz.service.SysJobLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

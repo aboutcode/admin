@@ -17,7 +17,7 @@
 
 package com.codeiy.quartz.event;
 
-import com.pig4cloud.pig.daemon.quartz.entity.SysJobLog;
+import com.codeiy.quartz.entity.SysJobLog;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
