@@ -16,11 +16,15 @@
 
 package com.codeiy.common.log;
 
+import cn.dev33.satoken.stp.SaLoginConfig;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.http.HttpUtil;
+import com.codeiy.common.util.SecurityUtils;
 import com.codeiy.common.util.SpringContextHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
@@ -54,7 +58,7 @@ public class SysLogUtils {
 		sysLog.setMethod(request.getMethod());
 		sysLog.setRemoteAddr(JakartaServletUtil.getClientIP(request));
 		sysLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-		sysLog.setCreateBy(getUsername());
+		sysLog.setCreateBy(SecurityUtils.getUsername());
 		sysLog.setServiceId(getClientId());
 
 		// get 参数脱敏
@@ -65,18 +69,6 @@ public class SysLogUtils {
 		return sysLog;
 	}
 
-	/**
-	 * 获取用户名称
-	 * @return username
-	 */
-	private String getUsername() {
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (authentication == null) {
-//			return null;
-//		}
-//		return authentication.getName();
-		return null;
-	}
 
 	/**
 	 * 获取spel 定义的参数值

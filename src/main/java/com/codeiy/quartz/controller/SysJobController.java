@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codeiy.common.log.AutoLog;
 import com.codeiy.common.util.R;
+import com.codeiy.common.util.SecurityUtils;
 import com.codeiy.quartz.constants.QuartzEnum;
 import com.codeiy.quartz.entity.SysJob;
 import com.codeiy.quartz.entity.SysJobLog;
@@ -100,7 +101,7 @@ public class SysJobController {
 	@Operation(description = "新增定时任务")
 	public R save(@RequestBody SysJob sysJob) {
 		sysJob.setJobStatus(QuartzEnum.JOB_STATUS_RELEASE.getType());
-//		sysJob.setCreateBy(SecurityUtils.getUser().getUsername());
+		sysJob.setCreateBy(SecurityUtils.getUsername());
 		sysJobService.save(sysJob);
 		// 初始化任务
 		taskUtil.addOrUpateJob(sysJob, scheduler);
@@ -116,7 +117,7 @@ public class SysJobController {
 	@PutMapping
 	@Operation(description = "修改定时任务")
 	public R updateById(@RequestBody SysJob sysJob) {
-//		sysJob.setUpdateBy(SecurityUtils.getUser().getUsername());
+		sysJob.setUpdateBy(SecurityUtils.getUsername());
 		SysJob querySysJob = this.sysJobService.getById(sysJob.getJobId());
 		if (QuartzEnum.JOB_STATUS_NOT_RUNNING.getType().equals(querySysJob.getJobStatus())) {
 			this.taskUtil.addOrUpateJob(sysJob, scheduler);
