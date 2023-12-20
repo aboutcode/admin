@@ -92,4 +92,29 @@ public interface CommonConstants {
      */
     String REQUEST_START_TIME = "REQUEST-START-TIME";
 
+    /**
+     * 登录成功
+     */
+    String LOGIN_SUCCESS = "0";
+
+    /**
+     * 退出成功
+     */
+    String LOGOUT_SUCCESS = "2";
+
+    /**
+     * 登录失败
+     */
+    String LOGIN_FAIL = "1";
+
+    /**
+     * {bcrypt} 加密的特征码
+     */
+    String BCRYPT = "{bcrypt}";
+
+    /**
+     * {noop} 加密的特征码
+     */
+    String NOOP = "{noop}";
+
 }

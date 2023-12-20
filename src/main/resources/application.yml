@@ -47,10 +47,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-# security.xss
+# security
 security:
   xss:
     enabled: false
+  ignore:
+    urls: []
 
 # mybatis-plus 配置
 mybatis-plus:
