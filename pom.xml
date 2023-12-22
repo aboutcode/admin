@@ -221,6 +221,10 @@
             <artifactId>sa-token-jwt</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+        </dependency>
 
     </dependencies>
     <dependencyManagement>
