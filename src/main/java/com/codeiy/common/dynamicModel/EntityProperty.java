@@ -57,6 +57,7 @@ public class EntityProperty {
         }
         if (StrUtil.isBlank(fieldType)) {
             fieldClass = Object.class;
+            return fieldClass;
         }
         switch (fieldType.toLowerCase()) {
             case "string":
