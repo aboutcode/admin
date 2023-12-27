@@ -12,11 +12,10 @@ import net.bytebuddy.description.annotation.AnnotationValue;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -45,42 +44,45 @@ public class DynamicModel {
             }
             builder = builder.name(name);
             if (CollectionUtil.isNotEmpty(classAnnotationProps)) {
+                List<AnnotationDescription> annotations = new ArrayList<>();
                 for (String annotationName : classAnnotationProps.keySet()) {
                     Class<? extends Annotation> annotationClass = Class.forName(annotationName).asSubclass(Annotation.class);
                     AnnotationDescription.Builder annotationBuilder = AnnotationDescription.Builder.ofType(annotationClass);
                     JSONObject annotationProps = classAnnotationProps.getJSONObject(annotationName);
-                    annotationProps.forEach((propName, propValue) -> {
+                    for (String propName : annotationProps.keySet()) {
+                        Object propValue = annotationProps.get(propName);
                         if (ObjectUtil.isBasicType(propValue) || propValue instanceof String) {
-                            annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
+                            annotationBuilder = annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
                         } else {
-                            annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
+                            annotationBuilder = annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
                         }
-                    });
-                    builder = builder.annotateType(annotationBuilder.build());
+                    }
+                    annotations.add(annotationBuilder.build());
                 }
+                builder = builder.annotateType(annotations);
             }
 
             if (CollectionUtil.isNotEmpty(fieldProps)) {
                 for (EntityProperty fieldProp : fieldProps) {
-                    DynamicType.Builder.FieldDefinition.Optional.Valuable defineField = builder.defineField(fieldProp.getFieldName(), fieldProp.getType(), Modifier.PROTECTED);
                     Set<String> annotationNames = fieldProp.getAnnotationNames();
                     if (CollectionUtil.isNotEmpty(annotationNames)) {
+                        List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
                         for (String annotationName : annotationNames) {
                             Class<? extends Annotation> annotationClass = Class.forName(annotationName).asSubclass(Annotation.class);
                             AnnotationDescription.Builder annotationBuilder = AnnotationDescription.Builder.ofType(annotationClass);
                             for (String propName : fieldProp.getAnnotationPropertyName(annotationName)) {
                                 Object propValue = fieldProp.getAnnotationPropertyValue(annotationName, propName);
-                                log.info("propName: {}, propValue: {}", propName, propValue);
                                 if (ObjectUtil.isBasicType(propValue) || propValue instanceof String) {
-                                    annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
+                                    annotationBuilder = annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
                                 } else {
-                                    annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
+                                    annotationBuilder = annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
                                 }
                             }
-                            builder = defineField.annotateField(annotationBuilder.build());
+                            fieldAnnotations.add(annotationBuilder.build());
                         }
+                        builder = builder.defineField(fieldProp.getFieldName(), fieldProp.getType(), Modifier.PROTECTED).annotateField(fieldAnnotations);
                     } else {
-                        builder = defineField;
+                        builder = builder.defineField(fieldProp.getFieldName(), fieldProp.getType(), Modifier.PROTECTED);
                     }
                     builder = builder
                             .defineMethod("get" + StrUtil.upperFirst(fieldProp.getFieldName()), fieldProp.getType(), Modifier.PUBLIC)
@@ -93,18 +95,16 @@ public class DynamicModel {
 
             // 加载新类型，默认WRAPPER策略
             try (DynamicType.Unloaded<?> unloaded = builder.make()) {
-                String classpath = "D:\\code\\admin";
-                Path outputPath = Paths.get(classpath + "/target/classes/com/codeiy/common/dynamicModel/User.class");
-                try (FileOutputStream outputStream = new FileOutputStream(outputPath.toFile())) {
-                    outputStream.write(unloaded.getBytes());
-                }
-                return unloaded.load(ByteBuddy.class.getClassLoader())
-                        .getLoaded()
-                        .getDeclaredConstructor().newInstance();
+                File file = new File("target/classes");
+                return unloaded.saveIn(file).getClass().getConstructor().newInstance();
+//                return unloaded.load(ByteBuddy.class.getClassLoader())
+//                        .getLoaded()
+//                        .getDeclaredConstructor().newInstance();
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("create instance fail: " + e.getMessage(), e);
         }
     }
+
 }
