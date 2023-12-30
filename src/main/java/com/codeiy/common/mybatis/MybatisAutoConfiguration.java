@@ -50,7 +50,7 @@ public class MybatisAutoConfiguration implements WebMvcConfigurer {
 	@Bean
 	public MybatisPlusInterceptor mybatisPlusInterceptor() {
 		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-		interceptor.addInnerInterceptor(new PigPaginationInnerInterceptor());
+		interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
 		return interceptor;
 	}
 

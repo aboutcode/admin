@@ -19,9 +19,9 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pig4cloud.pig.admin.mapper.SysUserMapper">
+<mapper namespace="com.codeiy.system.mapper.SysUserMapper">
     <!-- 通用查询映射结果 -->
-    <resultMap id="baseResultMap" type="com.pig4cloud.pig.admin.api.vo.UserVO">
+    <resultMap id="baseResultMap" type="com.codeiy.system.vo.UserVO">
         <id column="user_id" property="userId"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -41,12 +41,12 @@
         <result column="nickname" property="nickname"/>
         <result column="name" property="name"/>
         <result column="email" property="email"/>
-        <collection property="roleList" ofType="com.pig4cloud.pig.admin.api.entity.SysRole"
-                    select="com.pig4cloud.pig.admin.mapper.SysRoleMapper.listRolesByUserId" column="user_id">
-        </collection>
-        <collection property="postList" ofType="com.pig4cloud.pig.admin.api.entity.SysPost"
-                    select="com.pig4cloud.pig.admin.mapper.SysPostMapper.listPostsByUserId" column="user_id">
-        </collection>
+<!--        <collection property="roleList" ofType="com.codeiy.system.entity.SysRole"-->
+<!--                    select="com.codeiy.system.mapper.SysRoleMapper.listRolesByUserId" column="user_id">-->
+<!--        </collection>-->
+<!--        <collection property="postList" ofType="com.codeiy.system.entity.SysPost"-->
+<!--                    select="com.codeiy.system.mapper.SysPostMapper.listPostsByUserId" column="user_id">-->
+<!--        </collection>-->
     </resultMap>
 
     <sql id="userRoleSql">

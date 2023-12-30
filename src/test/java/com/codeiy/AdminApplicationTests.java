@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.codeiy.common.dynamicModel.DynamicModel;
-import com.codeiy.common.dynamicModel.EntityProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

@@ -3,7 +3,6 @@ package com.codeiy.common.mybatis;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ParameterUtils;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.dialects.IDialect;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ import java.sql.SQLException;
  */
 @Data
 @NoArgsConstructor
-public class PigPaginationInnerInterceptor extends PaginationInnerInterceptor {
+public class PaginationInnerInterceptor extends com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor {
 
 	/**
 	 * 数据库类型
@@ -41,11 +40,11 @@ public class PigPaginationInnerInterceptor extends PaginationInnerInterceptor {
 	 */
 	private IDialect dialect;
 
-	public PigPaginationInnerInterceptor(DbType dbType) {
+	public PaginationInnerInterceptor(DbType dbType) {
 		this.dbType = dbType;
 	}
 
-	public PigPaginationInnerInterceptor(IDialect dialect) {
+	public PaginationInnerInterceptor(IDialect dialect) {
 		this.dialect = dialect;
 	}
 

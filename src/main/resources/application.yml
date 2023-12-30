@@ -1,7 +1,19 @@
 server:
   port: 6666
-  servlet:
-    context-path: /admin
+# Actuator Web 访问端口
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include: "*"
+  server:
+    port: 8081
 
 spring:
   application:
