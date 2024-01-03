@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @TableName(schema = "information_schema", value = "COLUMNS")
-public class ModelField {
+public class ColumnInfo {
     public static final String PRIMARY_KEY = "PRI";
     private String tableSchema;
     private String tableName;
