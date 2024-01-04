@@ -1014,4 +1014,16 @@ INSERT INTO `sys_user_role` (`user_id`, `role_id`) VALUES (1, 1);
 INSERT INTO `sys_user_role` (`user_id`, `role_id`) VALUES (1676492190299299842, 2);
 COMMIT;
 
+
+CREATE TABLE `model_info` (
+      `mdel_id` bigint NOT NULL COMMENT '主键',
+      `model_code` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '模型编码',
+      `schema_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '数据库实例名',
+      `table_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '表名',
+      `model_name` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+      `remark` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+      PRIMARY KEY (`mdel_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='动态模型表';
+
+
 SET FOREIGN_KEY_CHECKS = 1;
