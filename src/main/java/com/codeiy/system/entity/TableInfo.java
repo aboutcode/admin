@@ -9,9 +9,9 @@ import java.util.Collection;
 @Data
 @TableName(schema = "information_schema", value = "TABLES")
 public class TableInfo {
-    private String tableSchema;
-    private String tableName;
-    private String tableComment;
+    protected String tableSchema;
+    protected String tableName;
+    protected String tableComment;
     @TableField(exist = false)
-    private Collection<ColumnInfo> fields;
+    protected Collection<ColumnInfo> fields;
 }

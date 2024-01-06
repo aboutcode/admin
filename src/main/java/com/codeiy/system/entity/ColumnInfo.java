@@ -13,19 +13,19 @@ import java.util.List;
 @TableName(schema = "information_schema", value = "COLUMNS")
 public class ColumnInfo {
     public static final String PRIMARY_KEY = "PRI";
-    private String tableSchema;
-    private String tableName;
-    private String columnName;
-    private Integer ordinalPosition;
-    private String columnDefault;
-    private String isNullable;
-    private String dataType;
-//    private Integer characterMaximumLength;
-//    private Integer numericPrecision;
-//    private Integer numericScale;
-    private String columnKey;
-    private String extra;
-    private String columnComment;
+    protected String tableSchema;
+    protected String tableName;
+    protected String columnName;
+    protected Integer ordinalPosition;
+    protected String columnDefault;
+    protected String isNullable;
+    protected String dataType;
+//    protected Integer characterMaximumLength;
+//    protected Integer numericPrecision;
+//    protected Integer numericScale;
+    protected String columnKey;
+    protected String extra;
+    protected String columnComment;
     public Type getJavaType() {
         if (StrUtil.isBlank(dataType)) {
             return Object.class;

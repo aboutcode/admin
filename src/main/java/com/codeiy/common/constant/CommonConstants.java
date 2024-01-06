@@ -116,5 +116,8 @@ public interface CommonConstants {
      * {noop} 加密的特征码
      */
     String NOOP = "{noop}";
-
+    /**
+     * 动态模型包名前缀
+     */
+    String DYNAMIC_PACKAGE_PREFIX = "com.codeiy.dynamic.";
 }

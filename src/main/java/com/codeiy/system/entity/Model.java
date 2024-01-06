@@ -12,10 +12,11 @@ public class Model {
      * 编号
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Long modelId;
-    private String modelCode;
-    private String modelName;
-    private String schemaName;
-    private String tableName;
-    private String remark;
+    protected Long modelId;
+    protected String modelCode;
+    protected String modelName;
+    protected String schemaName;
+    protected String tableName;
+    protected String remark;
+    protected Boolean enableFlag;
 }

@@ -1,97 +1,57 @@
 package com.codeiy.common.dynamicModel;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.codeiy.common.entity.BaseEntity;
+import com.codeiy.system.entity.Model;
+import com.codeiy.system.service.ModelService;
+import com.github.yulichang.base.MPJBaseMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.mapper.MapperFactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class DynamicModel {
-//    public static Object createEntity(String packageName, String supperClassName, String className, JSONObject classAnnotationProps, List<EntityProperty> fieldProps) {
-//        try {
-//            String name = packageName + "." + className;
-//            ClassLoader classLoader = ByteBuddy.class.getClassLoader();
-//            try {
-//                Class<?> classType = ClassUtils.forName(className, classLoader);
-//                return classType.getDeclaredConstructor().newInstance();
-//            } catch (IllegalAccessError var3) {
-//                throw new IllegalStateException("Readability mismatch in inheritance hierarchy of class [" + className + "]: " + var3.getMessage(), var3);
-//            } catch (Throwable var4) {
-//                // not present
-//            }
-//
-//            ByteBuddy byteBuddy = new ByteBuddy();
-//            DynamicType.Builder<?> builder;
-//            if (StrUtil.isNotBlank(supperClassName)) {
-//                Class<?> supperClass = Class.forName(supperClassName);
-//                builder = byteBuddy.subclass(Object.class).implement(supperClass);
-//            } else {
-//                builder = byteBuddy.subclass(Object.class);
-//            }
-//            builder = builder.name(name);
-//            if (CollectionUtil.isNotEmpty(classAnnotationProps)) {
-//                List<AnnotationDescription> annotations = new ArrayList<>();
-//                for (String annotationName : classAnnotationProps.keySet()) {
-//                    Class<? extends Annotation> annotationClass = Class.forName(annotationName).asSubclass(Annotation.class);
-//                    AnnotationDescription.Builder annotationBuilder = AnnotationDescription.Builder.ofType(annotationClass);
-//                    JSONObject annotationProps = classAnnotationProps.getJSONObject(annotationName);
-//                    for (String propName : annotationProps.keySet()) {
-//                        Object propValue = annotationProps.get(propName);
-//                        if (ObjectUtil.isBasicType(propValue) || propValue instanceof String) {
-//                            annotationBuilder = annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
-//                        } else {
-//                            annotationBuilder = annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
-//                        }
-//                    }
-//                    annotations.add(annotationBuilder.build());
-//                }
-//                builder = builder.annotateType(annotations);
-//            }
-//
-//            if (CollectionUtil.isNotEmpty(fieldProps)) {
-//                for (EntityProperty fieldProp : fieldProps) {
-//                    Set<String> annotationNames = fieldProp.getAnnotationNames();
-//                    if (CollectionUtil.isNotEmpty(annotationNames)) {
-//                        List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
-//                        for (String annotationName : annotationNames) {
-//                            Class<? extends Annotation> annotationClass = Class.forName(annotationName).asSubclass(Annotation.class);
-//                            AnnotationDescription.Builder annotationBuilder = AnnotationDescription.Builder.ofType(annotationClass);
-//                            for (String propName : fieldProp.getAnnotationPropertyName(annotationName)) {
-//                                Object propValue = fieldProp.getAnnotationPropertyValue(annotationName, propName);
-//                                if (ObjectUtil.isBasicType(propValue) || propValue instanceof String) {
-//                                    annotationBuilder = annotationBuilder.define(propName, AnnotationValue.ForConstant.of(propValue));
-//                                } else {
-//                                    annotationBuilder = annotationBuilder.define(propName, AnnotationDescription.ForLoadedAnnotation.asValue(propValue, propValue.getClass()));
-//                                }
-//                            }
-//                            fieldAnnotations.add(annotationBuilder.build());
-//                        }
-//                        builder = builder.defineField(fieldProp.getFieldName(), fieldProp.getType(), Modifier.PROTECTED).annotateField(fieldAnnotations);
-//                    } else {
-//                        builder = builder.defineField(fieldProp.getFieldName(), fieldProp.getType(), Modifier.PROTECTED);
-//                    }
-//                    builder = builder
-//                            .defineMethod("get" + StrUtil.upperFirst(fieldProp.getFieldName()), fieldProp.getType(), Modifier.PUBLIC)
-//                            .intercept(FieldAccessor.ofField(fieldProp.getFieldName()));
-//                    builder = builder
-//                            .defineMethod("set" + StrUtil.upperFirst(fieldProp.getFieldName()), void.class, Modifier.PUBLIC).withParameter(fieldProp.getType())
-//                            .intercept(FieldAccessor.ofField(fieldProp.getFieldName()));
-//                }
-//            }
-//
-//            // 加载新类型，默认WRAPPER策略
-//            try (DynamicType.Unloaded<?> unloaded = builder.make()) {
-//                File file = new File("target/classes");
-//                return unloaded.saveIn(file).getClass().getConstructor().newInstance();
-////                return unloaded.load(ByteBuddy.class.getClassLoader())
-////                        .getLoaded()
-////                        .getDeclaredConstructor().newInstance();
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//            throw new RuntimeException("create instance fail: " + e.getMessage(), e);
-//        }
-//    }
+    @Autowired
+    protected ModelService modelService;
+    @Autowired
+    protected SqlSessionFactory sqlSessionFactory;
+    protected Map<String, MPJBaseMapper<? extends BaseEntity>> mapperContainer = new HashMap<>();
 
-
-
+    @PostConstruct
+    public void init() {
+        // 初始化动态模型
+        LambdaQueryWrapper<Model> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Model::getEnableFlag, true);
+        List<Model> models = modelService.list(wrapper);
+        if (CollectionUtil.isEmpty(models)){
+            return;
+        }
+        models.forEach(model -> {
+            Class<?> mapperClass = modelService.createModel(model);
+            MapperFactoryBean<?> factoryBean = new MapperFactoryBean<>(mapperClass);
+            factoryBean.setSqlSessionFactory(sqlSessionFactory);
+            sqlSessionFactory.getConfiguration().addMapper(mapperClass);
+            try {
+                String beanName = model.getModelCode();
+                SpringUtil.registerBean(beanName, factoryBean.getObject());
+                log.info("register mapper Bean -> name:{}", beanName);
+                MPJBaseMapper<? extends BaseEntity> mapper = SpringUtil.getBean(beanName);
+                mapperContainer.put(beanName, mapper);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        });
+    }
 }
