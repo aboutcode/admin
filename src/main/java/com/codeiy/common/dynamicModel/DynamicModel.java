@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.codeiy.common.entity.BaseEntity;
+import com.codeiy.common.base.BaseEntity;
 import com.codeiy.system.entity.Model;
 import com.codeiy.system.service.ModelService;
 import com.github.yulichang.base.MPJBaseMapper;

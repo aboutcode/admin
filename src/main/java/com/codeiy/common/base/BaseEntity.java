@@ -1,4 +1,4 @@
-package com.codeiy.common.entity;
+package com.codeiy.common.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

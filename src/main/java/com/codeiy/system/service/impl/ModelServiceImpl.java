@@ -2,15 +2,9 @@ package com.codeiy.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONObject;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.codeiy.common.entity.BaseEntity;
+import com.codeiy.common.base.BaseEntity;
 import com.codeiy.system.entity.Model;
 import com.codeiy.system.entity.TableInfo;
 import com.codeiy.system.entity.ColumnInfo;
@@ -28,15 +22,12 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

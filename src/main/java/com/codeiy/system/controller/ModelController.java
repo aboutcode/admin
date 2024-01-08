@@ -1,24 +1,21 @@
 package com.codeiy.system.controller;
 
-import cn.hutool.json.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.codeiy.common.base.BaseController;
 import com.codeiy.system.entity.Model;
-import com.codeiy.system.entity.TableInfo;
 import com.codeiy.system.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/model")
-public class ModelController {
+public class ModelController extends BaseController<Model> {
     @Autowired
     private ModelService modelService;
 
-    @GetMapping("/list")
-    public List<Model> list() {
-        return modelService.list();
+    @Override
+    protected IService<Model> getService() {
+        return modelService;
     }
 }
