@@ -1,11 +1,11 @@
 package com.codeiy.common.base;
 
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.codeiy.common.dynamicModel.CriteriaQuery;
+import com.github.yulichang.query.MPJQueryWrapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,19 +18,21 @@ public abstract class BaseController<T> {
 
     // 分页查询
     @GetMapping("/page")
-    public IPage<T> page(@RequestParam(defaultValue = "1") Integer current,
-                         @RequestParam(defaultValue = "10") Integer size,
-                         @RequestParam(required = false) String sortField,
-                         @RequestParam(required = false) String sortOrder) {
+    public IPage<T> page(@RequestBody CriteriaQuery criteriaQuery) {
         // 创建分页对象
-        Page<T> page = new Page<>(current, size);
+        Page<T> page = new Page<>(criteriaQuery.getPage(), criteriaQuery.getSize());
         // 添加排序条件（如果提供了排序字段和排序顺序）
-        if (sortField != null && !"".equals(sortField.trim())) {
-            boolean asc = "asc".equalsIgnoreCase(sortOrder);
-            page.addOrder(new OrderItem(sortField, asc));
+        if (criteriaQuery.getOrderBy() != null) {
+            page.addOrder(criteriaQuery.getOrderBy());
         }
         // 执行分页查询
-        // TODO：这里的lambda表达式是一个占位符，实际使用时需要替换为具体的查询条件。
+        MPJQueryWrapper<T> queryWrapper = new MPJQueryWrapper<>();
+        queryWrapper.page(page);
+        if (CollectionUtil.isNotEmpty(criteriaQuery.getFilters())) {
+            criteriaQuery.getFilters().forEach(criteria -> {
+                criteria.addCondition(queryWrapper);
+            });
+        }
         return service.page(page);
     }
 
@@ -66,10 +68,14 @@ public abstract class BaseController<T> {
 
     // 根据条件查询
     @GetMapping("/listByCondition")
-    public List<T> listByCondition(@RequestBody JSONObject queryParams) {
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        // todo: query params to condition
-//        queryWrapper.eq(fieldName, fieldValue);
+    public List<T> listByCondition(@RequestBody CriteriaQuery criteriaQuery) {
+        // query params to condition
+        MPJQueryWrapper<T> queryWrapper = new MPJQueryWrapper<>();
+        if (CollectionUtil.isNotEmpty(criteriaQuery.getFilters())) {
+            criteriaQuery.getFilters().forEach(criteria -> {
+                criteria.addCondition(queryWrapper);
+            });
+        }
         return service.list(queryWrapper);
     }
 }

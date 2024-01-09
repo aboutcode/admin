@@ -1,5 +1,6 @@
 package com.codeiy.common.dynamicModel;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import lombok.Data;
 import java.util.List;
 
@@ -11,9 +12,9 @@ import java.util.List;
 public class CriteriaQuery {
     private String tableName;
     private List<Criteria> filters;
-    private int page;
-    private int size;
-    private String orderBy;
+    private int page = 1;
+    private int size = 10;
+    private OrderItem orderBy;
     private List<CriteriaQuery> leftJoins;
 }
 
