@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codeiy.common.dynamicModel.CriteriaQuery;
-import com.github.yulichang.query.MPJQueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +26,16 @@ public abstract class BaseController<T> {
             page.addOrder(criteriaQuery.getOrderBy());
         }
         // 执行分页查询
-        MPJQueryWrapper<T> queryWrapper = new MPJQueryWrapper<>();
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.page(page);
         if (CollectionUtil.isNotEmpty(criteriaQuery.getFilters())) {
             criteriaQuery.getFilters().forEach(criteria -> {
                 criteria.addCondition(queryWrapper);
+            });
+        }
+        if (CollectionUtil.isNotEmpty(criteriaQuery.getLeftJoins())){
+            criteriaQuery.getLeftJoins().forEach(joinCriteria -> {
+                joinCriteria.addLeftJoin(queryWrapper);
             });
         }
         return service.page(page);
@@ -70,10 +75,15 @@ public abstract class BaseController<T> {
     @GetMapping("/listByCondition")
     public List<T> listByCondition(@RequestBody CriteriaQuery criteriaQuery) {
         // query params to condition
-        MPJQueryWrapper<T> queryWrapper = new MPJQueryWrapper<>();
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
         if (CollectionUtil.isNotEmpty(criteriaQuery.getFilters())) {
             criteriaQuery.getFilters().forEach(criteria -> {
                 criteria.addCondition(queryWrapper);
+            });
+        }
+        if (CollectionUtil.isNotEmpty(criteriaQuery.getLeftJoins())){
+            criteriaQuery.getLeftJoins().forEach(joinCriteria -> {
+                joinCriteria.addLeftJoin(queryWrapper);
             });
         }
         return service.list(queryWrapper);

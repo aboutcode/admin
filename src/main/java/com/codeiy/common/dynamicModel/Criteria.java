@@ -1,11 +1,10 @@
 package com.codeiy.common.dynamicModel;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.github.yulichang.query.MPJQueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,7 +54,7 @@ public class Criteria {
         values.add(value);
     }
 
-    public void addCondition(MPJQueryWrapper<?> queryWrapper) {
+    public void addCondition(MPJLambdaWrapper<?> queryWrapper) {
         if (CollectionUtil.isEmpty(fields)){
             log.warn("fields is empty");
             return;
